@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosApi from "../../axiosApi";
-import { Tasks } from "../../types";
+import { Task, Tasks } from "../../types";
 import { RootState } from "../../app/store";
 
 export const fetchTasks = createAsyncThunk<Tasks, void, {}>(
@@ -29,5 +29,12 @@ export const toggleTask = createAsyncThunk<void, string, { state: RootState }>(
       };
       await axiosApi.put(`todo/${taskId}.json`, updatedTask);
     }
+  }
+);
+
+export const createNewTask = createAsyncThunk<void, Task, { state: RootState }>(
+  "tasks/newTask",
+  async (task) => {
+    await axiosApi.post("todo.json", task);
   }
 );

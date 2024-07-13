@@ -35,7 +35,7 @@ const TaskList = () => {
             />
           ))
         ) : (
-          <h2>No tasks</h2>
+          <h2 className="text-center">Нет задач</h2>
         )}
       </div>
     </>
