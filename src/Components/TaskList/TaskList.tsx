@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../app/store";
 import { useEffect } from "react";
-import { fetchTasks } from "./taskThunk";
+import { deleteTask, fetchTasks, toggleTask } from "./taskThunk";
+import Task from "./Task";
 
 const TaskList = () => {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
@@ -10,15 +11,28 @@ const TaskList = () => {
   useEffect(() => {
     dispatch(fetchTasks());
   }, [dispatch]);
+
+  const onToggle = async (taskId: string) => {
+    await dispatch(toggleTask(taskId));
+    await dispatch(fetchTasks());
+  };
+
+  const onDelete = async (taskId: string) => {
+    await dispatch(deleteTask(taskId));
+    await dispatch(fetchTasks());
+  };
   return (
     <>
       <div>
         {tasks ? (
           Object.keys(tasks).map((key) => (
-            <>
-              <h1>{tasks[key].title}</h1>
-              <h2>status: {tasks[key].status ? "готово" : "не готово"}</h2>
-            </>
+            <Task
+              key={key}
+              title={tasks[key].title}
+              status={tasks[key].status}
+              onToggle={() => onToggle(key)}
+              onDelete={() => onDelete(key)}
+            />
           ))
         ) : (
           <h2>No tasks</h2>
